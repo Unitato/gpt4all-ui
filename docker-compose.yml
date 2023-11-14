@@ -38,7 +38,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.gpt-api.entrypoints=websecure
-      - traefik.http.routers.gpt-api.rule=Host(`duplicati.$DOMAIN`)
+      - traefik.http.routers.gpt-api.rule=Host(`gpt-api.$DOMAIN`)
       - traefik.http.routers.gpt-api.tls=true
       - traefik.http.routers.gpt-api.tls.certresolver=production
       - traefik.http.routers.gpt-api.service=gpt-api
