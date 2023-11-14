@@ -16,6 +16,6 @@ services:
     volumes:
       - ./models:/models
     ports:
-      - 8000:8000
+      - 8001:8000
     environment:
       - MODEL=/models/7B/gpt4all-lora-quantized.ggml
