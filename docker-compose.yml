@@ -13,7 +13,7 @@ services:
       - 3000:3000
     environment:
       - OPENAI_API_KEY=$OPENAI_API_KEY
-      - OPENAI_API_HOST=gpt-api.$DOMAIN
+      - OPENAI_API_HOST=https://gpt-api.$DOMAIN
 
     labels:
       - traefik.enable=true
