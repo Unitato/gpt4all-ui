@@ -1,21 +1,46 @@
 version: '3.6'
 
+networks:
+  gpt4all_network:
+  
 services:
-
-  chatgpt:
+  gpt:
     image: ghcr.io/mckaywrigley/chatbot-ui:main
     platform: linux/amd64
+    networks:
+      - gpt4all_network
     ports:
       - 3000:3000
     environment:
-      - 'OPENAI_API_KEY=000000000000000'
-      - 'OPENAI_API_HOST=http://api:8000'
+      - OPENAI_API_KEY=$OPENAI_API_KEY
+      - OPENAI_API_HOST=gpt-api.$DOMAIN
 
-  api:
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.gpt.entrypoints=websecure
+      - traefik.http.routers.gpt.rule=Host(`gpt.$DOMAIN`)
+      - traefik.http.routers.gpt.tls=true
+      - traefik.http.routers.gpt.tls.certresolver=production
+      - traefik.http.routers.gpt.service=gpt
+      - traefik.http.services.gpt.loadbalancer.server.port=3000
+      - traefik.http.services.gpt.loadbalancer.server.scheme=http
+      
+  gpt-api:
     build: .
     volumes:
-      - ./models:/models
+      - $MODELS_PATH:/models
+    networks:
+      - gpt4all_network
     ports:
       - 8001:8000
     environment:
-      - MODEL=/models/7B/gpt4all-lora-quantized.ggml
+      - MODEL=$MODEL_NAME
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.gpt-api.entrypoints=websecure
+      - traefik.http.routers.gpt-api.rule=Host(`duplicati.$DOMAIN`)
+      - traefik.http.routers.gpt-api.tls=true
+      - traefik.http.routers.gpt-api.tls.certresolver=production
+      - traefik.http.routers.gpt-api.service=gpt-api
+      - traefik.http.services.gpt-api.loadbalancer.server.port=8000
+      - traefik.http.services.gpt-api.loadbalancer.server.scheme=http
