@@ -21,7 +21,7 @@ import llama_cpp
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field, create_model_from_typeddict
-from pydantic-settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from sse_starlette.sse import EventSourceResponse
 
 
